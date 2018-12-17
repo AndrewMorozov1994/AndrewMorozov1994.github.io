@@ -1,0 +1,13 @@
+@media (max-width: 768px) {
+    body {
+        min-width: 320px;
+
+        .container {
+            width: 240px;
+        }
+
+        .sub_category_page .column_right {
+            width: 240px;
+        }
+    }
+}

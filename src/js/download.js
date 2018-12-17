@@ -20,8 +20,3 @@ export default class Loader {
         }
     }
 }
-
-
-
-
-// Loader.loadData().then(it => array.push(...it));

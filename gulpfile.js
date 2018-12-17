@@ -5,17 +5,25 @@ const plumber = require(`gulp-plumber`);
 const postcss = require(`gulp-postcss`);
 const autoprefixer = require(`autoprefixer`);
 const server = require(`browser-sync`).create();
-const mqpacker = require(`css-mqpacker`);
-const minify = require(`gulp-csso`);
 const rename = require(`gulp-rename`);
-const svgstore = require(`gulp-svgstore`);
 const rollup = require(`gulp-better-rollup`);
 const sourcemaps = require(`gulp-sourcemaps`);
-const commonjs = require(`rollup-plugin-commonjs`);
 const babel = require(`rollup-plugin-babel`);
+const cssmin = require('gulp-cssmin');
+
+gulp.task(`style`, function() {
+  gulp.src(`src/scss/style.scss`)
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(postcss([ autoprefixer() ]))
+    .pipe(cssmin())
+    .pipe(rename({suffix: `.min`}))
+    .pipe(gulp.dest(`build/css`))
+    .pipe(server.stream());
+});
 
 gulp.task(`scripts`, () => {
-    return gulp.src('src/js/**/*.js')
+    return gulp.src(`src/js/**/*.js`)
       .pipe(plumber())
       .pipe(rollup({
         plugins: [
@@ -40,7 +48,7 @@ gulp.task(`copy-html`, () => {
         pipe(server.stream());
   });
 
-  gulp.task(`copy`, [`copy-html`, `scripts`], () => {
+  gulp.task(`copy`, [`copy-html`, `scripts`, `style`], () => {
       return gulp.src(`src/misc/**/*.*`).
       pipe(gulp.dest(`build/misc`))
   });
@@ -50,7 +58,7 @@ gulp.task(`copy-html`, () => {
   });
 
   gulp.task(`assemble`, [`clean`], () => {
-    gulp.start(`copy`);
+    gulp.start(`copy`, `style`);
   });
 
   gulp.task(`js-watch`, [`scripts`], (done) => {
@@ -73,4 +81,5 @@ gulp.task(`serve`, [`assemble`], () => {
         }
       });
     gulp.watch(`src/js/**/*.{js,jsx}`, [`js-watch`]);
+    gulp.watch(`src/scss/**/*.{scss,sass}`, [`style`]);
 })
