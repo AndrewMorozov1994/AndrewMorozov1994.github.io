@@ -18,7 +18,7 @@ gulp.task(`style`, function() {
     .pipe(postcss([ autoprefixer() ]))
     .pipe(cssmin())
     .pipe(rename({suffix: `.min`}))
-    .pipe(gulp.dest(`build/css`))
+    .pipe(gulp.dest(`docs/css`))
     .pipe(server.stream());
 });
 
@@ -39,22 +39,22 @@ gulp.task(`scripts`, () => {
         ]
       }, `iife`))
       .pipe(sourcemaps.write(``))
-      .pipe(gulp.dest(`build/js`));
+      .pipe(gulp.dest(`docs/js`));
   });
 
 gulp.task(`copy-html`, () => {
     return gulp.src(`src/*.{html,ico,json}`).
-        pipe(gulp.dest(`build`)).
+        pipe(gulp.dest(`docs`)).
         pipe(server.stream());
   });
 
   gulp.task(`copy`, [`copy-html`, `scripts`, `style`], () => {
       return gulp.src(`src/misc/**/*.*`).
-      pipe(gulp.dest(`build/misc`))
+      pipe(gulp.dest(`docs/misc`))
   });
 
   gulp.task("clean", function () {
-    return del("build");
+    return del("docs");
   });
 
   gulp.task(`assemble`, [`clean`], () => {
@@ -68,7 +68,7 @@ gulp.task(`copy-html`, () => {
 
 gulp.task(`serve`, [`assemble`], () => {
     server.init({
-      server: `./build`,
+      server: `./docs`,
       notify: false,
       open: true,
       port: 3000,
@@ -82,4 +82,4 @@ gulp.task(`serve`, [`assemble`], () => {
       });
     gulp.watch(`src/js/**/*.{js,jsx}`, [`js-watch`]);
     gulp.watch(`src/scss/**/*.{scss,sass}`, [`style`]);
-})
+});
