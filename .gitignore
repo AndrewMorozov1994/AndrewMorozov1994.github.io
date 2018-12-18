@@ -5,5 +5,5 @@
 *.pdf
 *.psd
 *.sublime*
-build/
+dist/
 node_modules/

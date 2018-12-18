@@ -18,7 +18,7 @@ gulp.task(`style`, function() {
     .pipe(postcss([ autoprefixer() ]))
     .pipe(cssmin())
     .pipe(rename({suffix: `.min`}))
-    .pipe(gulp.dest(`docs/css`))
+    .pipe(gulp.dest(`dist/css`))
     .pipe(server.stream());
 });
 
@@ -39,22 +39,22 @@ gulp.task(`scripts`, () => {
         ]
       }, `iife`))
       .pipe(sourcemaps.write(``))
-      .pipe(gulp.dest(`docs/js`));
+      .pipe(gulp.dest(`dist/js`));
   });
 
 gulp.task(`copy-html`, () => {
     return gulp.src(`src/*.{html,ico,json}`).
-        pipe(gulp.dest(`docs`)).
+        pipe(gulp.dest(`dist`)).
         pipe(server.stream());
   });
 
   gulp.task(`copy`, [`copy-html`, `scripts`, `style`], () => {
       return gulp.src(`src/misc/**/*.*`).
-      pipe(gulp.dest(`docs/misc`))
+      pipe(gulp.dest(`dist/misc`))
   });
 
   gulp.task("clean", function () {
-    return del("docs");
+    return del("dist");
   });
 
   gulp.task(`assemble`, [`clean`], () => {
@@ -68,7 +68,7 @@ gulp.task(`copy-html`, () => {
 
 gulp.task(`serve`, [`assemble`], () => {
     server.init({
-      server: `./docs`,
+      server: `./dist`,
       notify: false,
       open: true,
       port: 3000,
