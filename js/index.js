@@ -142,7 +142,8 @@
   var addCards = async function addCards() {
       var loader = new Loader();
       var data = await loader.loadData();
-      await array.push.apply(array, _toConsumableArray(data));
+      var dataCards = await data.cards;
+      await array.push.apply(array, _toConsumableArray(dataCards));
       await showCard(array, createCard, productArea);
   };
 

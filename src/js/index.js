@@ -8,7 +8,8 @@ const productArea = document.querySelector(`.product__area`);
 const addCards = async () => {
     const loader = new Loader();
     const data = await loader.loadData();
-    await array.push(...data);
+    const dataCards = await data.cards;
+    await array.push(...dataCards);
     await showCard(array, createCard, productArea);
 };
 
